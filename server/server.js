@@ -1,4 +1,6 @@
 var express = require('express');
+var http = require('http');
+var path = require('path');
 var app = express();
 
 app.use(express.static('public'));
@@ -9,8 +11,15 @@ app.get('/', function (req, res) {
 })
 
 app.get('/menu', function (req, res) {
-  //TODO:the address must run under root, need to be figure out.
     res.sendFile(process.cwd() + '/pages/menu_module/menu.html');
+})
+
+app.get('/menu_module/static/js/menu.js', function (req, res) {
+    res.sendFile(process.cwd() + '/pages/menu_module/static/js/menu.js');
+})
+
+app.get('/menu_module/static/stylesheets/menu.css', function (req, res) {
+    res.sendFile(process.cwd() + '/pages/menu_module/static/stylesheets/menu.css');
 })
 
 app.get('/process_get', function (req, res) {
