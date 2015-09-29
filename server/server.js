@@ -8,6 +8,11 @@ app.get('/', function (req, res) {
    	res.sendFile(process.cwd() + '/pages/index.html');
 })
 
+app.get('/menu', function (req, res) {
+  //TODO:the address must run under root, need to be figure out.
+    res.sendFile(process.cwd() + '/pages/menu_module/menu.html');
+})
+
 app.get('/process_get', function (req, res) {
 
    	// Prepare output in JSON format
