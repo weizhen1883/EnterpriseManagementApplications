@@ -34,20 +34,42 @@
           <ul class="nav navbar-nav navbar-right">
             <!-- TODO3: Need to redesign the functions which we need-->
             <!-- TODO4: Need to use the val print each words -->
-            <li class="hidden edit-actions"><a id="add-cuisine" href="#" data-toggle="modal" data-target="#insert-cuisine-step1-modal">
-              Add Cuisine
-            </a></li>
-            <li class="hidden edit-actions"><a id="add-cuisine-type" href="#" data-toggle="modal" data-target="#insert-cuisine-type-modal">
-              Add Cuisine Type
-            </a></li>
-            <li class="hidden edit-actions"><a id="edit-cuisine-types" href="#" data-toggle="modal" data-target="#edit-cuisine-types-modal">
-              Edit Cuisine Types
-            </a></li>
+            <li class="hidden edit-actions"><a id="add-cuisine" href="#" data-toggle="modal" data-target="#insert-cuisine-step1-modal">Add Cuisine</a></li>
             <li><a id="toggle-edit" href="#">Edit</a></li>
             <li><a id="settings" href="#" data-toggle="modal" data-target="#settings-modal">Settings</a></li>
           </ul>
         </div>
         <!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <!-- cuisine type sidebar -->
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li id="siderbar_title"><h4>Cuisine Type</h4></li>
+      	    <!-- these part will print by js and get the list from database -->
+      	    <li id="siderbar_special"><a href="menu?special">Daily Special</a></li>
+      	    <!-- the list from the database -->
+      	    <hr>
+      	    <!-- show all -->
+      	    <li id="siderbar_showall"><a href="menu">Show All of the List</a></li>
+      	    <!-- edit-actions for cuision types -->
+      	    <hr class="hidden edit-actions">
+            <li class="hidden edit-actions"><a id="add-cuisine-type" href="#" data-toggle="modal" data-target="#insert-cuisine-type-modal">Add Cuisine Type</a></li>
+            <li class="hidden edit-actions"><a id="edit-cuisine-types" href="#" data-toggle="modal" data-target="#edit-cuisine-types-modal">Edit Cuisine Types</a></li>
+      	  </ul>
+        </div>
+
+        <!-- main table to show cuisions -->
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <div class="table-responsive">
+            <table class="table table-striped">
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
 
