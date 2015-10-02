@@ -49,16 +49,26 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li id="siderbar_title"><h4>Cuisine Type</h4></li>
+            <!-- edit-actions for cuision types -->
+            <li class="hidden edit-actions">
+              <button id="add-cuisine-type" class="btn-block btn-success" type="button" href="#" data-toggle="modal" data-target="#insert-cuisine-type-modal">Add Cuisine Type</button>
+            </li>
+            <li class="hidden edit-actions">
+              <button id="edit-cuisine-types" class="btn-block btn-warning" type="button" href="#" data-toggle="modal" data-target="#edit-cuisine-types-modal">Edit Cuisine Types</button>
+            </li>
+            <hr class="hidden edit-actions">
       	    <!-- these part will print by js and get the list from database -->
       	    <li id="siderbar_special"><a href="menu?special">Daily Special</a></li>
-      	    <!-- the list from the database -->
+            <hr>
+            <!-- the list from the database -->
+            <li id="siderbar-types-beef"><a href="menu?beef">Beef</a></li>
+            <li id="siderbar-types-beef"><a href="menu?beef">Beef</a></li>
+            <li id="siderbar-types-beef"><a href="menu?beef">Beef</a></li>
+            <li id="siderbar-types-beef"><a href="menu?beef">Beef</a></li>
       	    <hr>
       	    <!-- show all -->
       	    <li id="siderbar_showall"><a href="menu">Show All of the List</a></li>
-      	    <!-- edit-actions for cuision types -->
-      	    <hr class="hidden edit-actions">
-            <li class="hidden edit-actions"><a id="add-cuisine-type" href="#" data-toggle="modal" data-target="#insert-cuisine-type-modal">Add Cuisine Type</a></li>
-            <li class="hidden edit-actions"><a id="edit-cuisine-types" href="#" data-toggle="modal" data-target="#edit-cuisine-types-modal">Edit Cuisine Types</a></li>
+      	    
       	  </ul>
         </div>
 
@@ -69,7 +79,37 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
 
+    <!--  ADD CUISINE TYPE MODAL  -->
+    <div class="modal fade" id="insert-cuisine-type-modal" tabindex="-1" role="dialog"
+      aria-labelledby="Add Cuisine Type" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Add Cuisin Type</h4>
+          </div>
+          <form action="menu/add_type" method="POST" class="form-horizontal" role="form">
+            <input type="text" name="lastSortOrder" class="hidden">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="cuisine-type-input" class="col-sm-4 control-label">Type Name</label>
+                <div class="col-sm-4">
+                  <input type="text" name="cuisine_type_name" class="form-control" id="cuisine-type-input1" 
+                    placeholder="Cuisine Type Name">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-success">Add</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 

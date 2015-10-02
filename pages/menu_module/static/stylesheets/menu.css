@@ -122,3 +122,7 @@ th {
 .cuisineName {
   font-size: 20px;
 }
+
+.inline {
+  display: inline;
+}

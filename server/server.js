@@ -1,7 +1,10 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var bodyParser = require('body-parser');
 var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true})); 
 
 app.use(express.static('public'));
 
@@ -12,6 +15,12 @@ app.get('/', function (req, res) {
 
 app.get('/menu', function (req, res) {
     res.sendFile(process.cwd() + '/pages/menu_module/menu.html');
+})
+
+app.post('/menu/add_type', function (req, res) {
+    var data = req.body.cuisine_type_name;
+    //add the type name into database
+    res.send(data);
 })
 
 app.get('/menu_module/static/js/menu.js', function (req, res) {
