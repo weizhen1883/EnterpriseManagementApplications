@@ -3,6 +3,7 @@ var erm = erm || {};
 erm.emenu = erm.emenu || {};
 // My global variable is now restricted and shouldn't collide.
 erm.emenu.editing = false;
+erm.emenu.type_editing = false;
 
 erm.emenu.hideNavbar = function() {
 	var $navbar = $(".collapse.navbar-collapse"); // .class1.class2 checks to see if it belongs to BOTH class1 and class2.
