@@ -3,7 +3,6 @@ var erm = erm || {};
 erm.emenu = erm.emenu || {};
 // My global variable is now restricted and shouldn't collide.
 erm.emenu.editing = false;
-erm.emenu.type_editing = false;
 
 erm.emenu.hideNavbar = function() {
 	var $navbar = $(".collapse.navbar-collapse"); // .class1.class2 checks to see if it belongs to BOTH class1 and class2.
@@ -103,6 +102,7 @@ erm.emenu.enableButtons = function() {
 		name_en = $("#insert-cuisine-step1-modal input[name=cuisine_name_en]").val();
 		console.log("Name in English: " + name_en);
 		$("#insert-cuisine-step4-modal input[name=cuisine_name_en]").val(name_en);
+		console.log($("#insert-cuisine-step4-modal input[name=cuisine_name_en]").val());
 
 		description_ch = $("#insert-cuisine-step1-modal textarea[name=cuisine_description_ch]").val();
 		console.log("Description in Chinese: " + description_ch);
