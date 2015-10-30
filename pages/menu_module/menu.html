@@ -82,7 +82,7 @@
               <!-- cuisine view -->
                 <tr ng-repeat="cuisine in cuisines">
                   <td class = "cuisineName">{{cuisine.Name}}</td>
-                  <td>{{cuisine.Price|currency}}</td>
+                  <td>{{cuisine.price|currency}}</td>
                   <td class = "image"><img ng-src="{{cuisine.image}}" style="width:150px;height:150px;"></td>
                 </tr>
 
@@ -314,7 +314,7 @@
                 </label>
                 <div class="col-sm-8">
                   <select class="form-control" name="cuisine_type" id="cuisine-type-select">
-                    <option ng-repeat="type in types" value="null">{{type.Name}}</option>
+                    <option ng-repeat="type in types" value="{{type.Name}}">{{type.Name}}</option>
 
                   <!--  add type name  -->
 

@@ -75,31 +75,31 @@ app.post('/menu/add_type', function (req, res) {
 app.post('/menu/add_cuisine', function (req, res){
     var multiparty = require('multiparty');
     var form = new multiparty.Form();
-    res.send(req.body.cuisine_name_en);
     form.parse(req, function (err, fields, files){
       var img = files.imageFile[0];
       var fs = require('fs');
       fs.readFile(img.path, function (err, data){
-          var path = "./pages/menu_module/static/src/" + img.originalFilename;
+          var path = "/pages/menu_module/static/src/" + img.originalFilename;
           fs.writeFile(path, data, function (err){
             if(err) console.log(err);
         });
       });
-      // var cuisine = {
-      //   Name: req.body.cuisine_name_en,
-      //   price: req.body.cuisine_retailPrice,
-      //   description:req.body.cuisine_description_en,
-      //   image:"./pages/menu_module/static/src/" + img.originalFilename
-      // };
-
-    //   Type.findOneAndUpdate(
-    //   { Name: req.body.cuisine_typeID },
-    //   { $push: { cuisines: cuisine }},
-    //   { safe: true, upsert: true },
-    //   function(err, blogModels) {
-    //     if(err) console(err);
-    //     });
+      var newCuisine = {
+        Name: fields.cuisine_name_en[0],
+        price: fields.cuisine_retailPrice[0],
+        description: fields.cuisine_description_en[0],
+        image: "/pages/menu_module/static/src/" + img.originalFilename
+      };
+      
+      Type.findOneAndUpdate(
+      { Name: fields.cuisine_typeID[0] },
+      { $push: { cuisines: newCuisine }},
+      { safe: true, upsert: true },
+      function(err, blogModels) {
+        if(err) console(err);
+      });
     });
+    res.redirect('/menu');
   });
 
 app.get('/menu_module/static/js/menu.js', function (req, res) {
