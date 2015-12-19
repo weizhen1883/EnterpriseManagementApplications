@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})); 
 
-app.use(express.static('public'));
+app.use(express.static('pages/menu_module/static'));
 
 mongoose.connect('mongodb://localhost/test');
 
@@ -60,15 +60,34 @@ app.get('/menu', function (req, res) {
 app.post('/menu/add_type', function (req, res) {
     var data = req.body.cuisine_type_name;
     //add the type name into database
+    console.log(23333);
     var newType = new Type({Name:data,cuisines:[]});
     newType.save( function(error, data){
       if(error){
         //res.json(error);
         console.log(error);
       }else{
-      console.log(data.Name);
+        console.log(data.Name);
       }
     });
+    // res.redirect('/menu');
+    Type.find(function(err,doc){
+    for(type in doc){
+      if(doc[type].Name === data){
+        res.send(JSON.stringify(doc[type]));
+      };
+    }
+  }); 
+})
+
+app.post('/menu/dalete_type', function (req, res) {
+    var data = req.body.typeID;
+    //add the type name into database
+    Type.findOneAndRemove(
+      { Name: data },
+      function (err){
+        if(err) console.log(err);
+      }); 
     res.redirect('/menu');
 })
 
@@ -78,17 +97,19 @@ app.post('/menu/add_cuisine', function (req, res){
     form.parse(req, function (err, fields, files){
       var img = files.imageFile[0];
       var fs = require('fs');
+      console.log(img);
       fs.readFile(img.path, function (err, data){
-          var path = "/pages/menu_module/static/src/" + img.originalFilename;
+          var path = "./pages/menu_module/static/src/" + img.originalFilename;
           fs.writeFile(path, data, function (err){
             if(err) console.log(err);
         });
       });
+
       var newCuisine = {
         Name: fields.cuisine_name_en[0],
         price: fields.cuisine_retailPrice[0],
         description: fields.cuisine_description_en[0],
-        image: "/pages/menu_module/static/src/" + img.originalFilename
+        image: "/src/" + img.originalFilename
       };
       
       Type.findOneAndUpdate(
@@ -100,27 +121,35 @@ app.post('/menu/add_cuisine', function (req, res){
       });
     });
     res.redirect('/menu');
+    // res.end(JSON.stringify({
+    //   type: fields.cuisine_typeID[0] 
+    // }))
   });
+
+app.post('/menu/cuisine_edit', function (req, res){
+  var data = req.body;
+  console.log(data);
+});
 
 app.get('/menu_module/static/js/menu.js', function (req, res) {
     res.sendFile(process.cwd() + '/pages/menu_module/static/js/menu.js');
-})
+});
 
 app.get('/menu_module/static/js/app.js', function (req, res) {
     res.sendFile(process.cwd() + '/pages/menu_module/static/js/app.js');
-})
+});
 
 app.get('/menu_module/static/js/controller.js', function (req, res) {
     res.sendFile(process.cwd() + '/pages/menu_module/static/js/controller.js');
-})
+});
 
 app.get('/menu_module/static/js/service/Types.js', function (req, res) {
     res.sendFile(process.cwd() + '/pages/menu_module/static/js/service/Types.js');
-})
+});
 
 app.get('/menu_module/static/stylesheets/menu.css', function (req, res) {
     res.sendFile(process.cwd() + '/pages/menu_module/static/stylesheets/menu.css');
-})
+});
 
 app.get('/process_get', function (req, res) {
 

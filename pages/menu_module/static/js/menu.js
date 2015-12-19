@@ -84,7 +84,7 @@ erm.emenu.enableButtons = function() {
 	});
 
 	$(".delete-cuisine-type").click(function() {
-		typeID = $(this).find(".typeID").html();
+		typeID = $("select[name=typeName]").val();
 		console.log("DELETE TYPE ID: " + typeID);
 		$("#delete-cuisine-type-modal input[name=typeID]").val(typeID).prop("disabled", false);
 	});
@@ -124,9 +124,201 @@ erm.emenu.enableButtons = function() {
 		console.log("retail price: " + price);
 		$("#insert-cuisine-step4-modal input[name=cuisine_retailPrice]").val(price);
 	});
+
+	$('#submit').click (function() {
+   		$('.modal fade').modal('hide');
+	});
 };
 
 $(document).ready(function() {
 	erm.emenu.enableButtons();
 	//erm.emenu.addEventHandlers();
 });
+
+$(document).ready(function() {
+	var TypeId;
+
+	$.ajax({
+		type: 'get',
+		url:'/Types',
+		success: function(types) {
+			$.each(types, function(i, type){ 
+				$('#Type_list').append('<li><a href="#" id ="'+type._id+'">'+type.Name+'</a></li>');
+				$('#cuisine-type-select').append('<option value="'+type.Name+'">'+type.Name+'</option>');
+				$('#cuisine-type-select2').append('<option value="'+type.Name+'">'+type.Name+'</option>');
+				$('#'+type._id).click(function (){
+					var TypeId = type._id;
+					$("#cuisines_menu").replaceWith('<tbody id="cuisines_menu"></tbody>');
+					$.each(type.cuisines, function(i, cuisine){
+						$("#cuisines_menu" ).append(
+				'<tr>'+
+                  '<td>'+
+                  '<div class="row">'+
+                    '<div class="image"><img src="'+cuisine.image+'" height="100px"></div>'+
+                    '<div class="intro">'+
+                      '<div class="row">'+
+                        '<div class="col-sm-10 cuisineName" name="cuisineName">'+cuisine.Name+'</div>'+
+                        '<div class="col-sm-2" id="price">'+toUSD(cuisine.price)+'</div>'+
+                        '<!-- <div class="col-sm-2">$".$retailPrice."</div> -->'+
+                      '</div>'+
+                      '<div class="row"><div class="col-sm-12">'+cuisine.description+'</div></div>'+
+                    '</div>'+
+                  '</div>'+
+                  '</td>'+
+                  '<td class="hidden edit-actions">'+
+                  '<div class="row"><div class="col-md-6">'+
+                    '<button data-toggle="modal" data-target="#edit-cuisine-modal" type="button"'+
+                          'class="edit-cuisine btn btn-success btn-xs">'+
+                      '<span class="glyphicon glyphicon-pencil"></span>'+
+                      '<!-- <div class="hidden cuisineID">".$cuisineID."</div> -->'+
+                      '<div class="hidden cuisineName">'+cuisine.Name+'</div>'+
+                      '<div class="hidden retailPrice">'+cuisine.price+'</div>'+
+                      '<!-- <div class="hidden specialPrice">".$specialPrice."</div> -->'+
+                      '<!-- <div class="hidden description">".$description."</div> -->'+
+                      '<!-- <div class="hidden cuisineTypeID">".$cuisineTypeID."</div> -->'+
+                      '<!-- <div class="hidden dailyspecial">".$dailyspecialCheck."</div> -->'+
+                    '</button>'+
+                  '</div>'+
+                  '<div class="col-md-6">'+
+                    '<button data-toggle="modal" data-target="#delete-cuisine-modal" type="button"'+
+                        'class="delete-cuisine btn btn-danger btn-xs">'+
+                    '<span class="glyphicon glyphicon-trash"></span>'+
+                      '<!-- <div class="hidden cuisineID">".$cuisineID."</div> -->'+
+                    '</button>'+
+                  '</div>'+
+                '</div>'+
+              '</td>'+
+            '</tr>')})
+				})
+			});
+		}
+	});
+
+	var newTypeFrom = $('#Typeform');
+	newTypeFrom.submit(function(e){
+		$.ajax({
+			type:newTypeFrom.attr('method'),
+			url:newTypeFrom.attr('action'),
+			data:newTypeFrom.serialize(),
+			success:function(data){
+				var type = JSON.parse(data);
+				$('#Type_list').append('<li><a href="#" id ="'+type._id+'">'+type.Name+'</a></li>');
+				$('#cuisine-type-select').append('<option value="'+type.Name+'">'+type.Name+'</option>');
+				$('#insert-cuisine-type-modal').modal('hide');
+			},
+			error: function(){
+				alert("ERROR");
+			}
+		});
+		e.preventDefault();
+	});
+	
+	var CuisineEditForm = $("#cuisine_edit");
+	CuisineEditForm.submit(function(e){
+		console.log(CuisineEditForm.serialize());
+		$.ajax({
+			type:CuisineEditForm.attr('method'),
+			url:CuisineEditForm.attr('action'),
+			data:CuisineEditForm.serialize(),
+			success: function(data){
+
+			},
+			error: function(){
+
+			}
+		})
+		e.preventDefault();
+	})
+
+	function toUSD(number) {
+    var number = number.toString(), 
+    dollars = number.split('.')[0], 
+    cents = (number.split('.')[1] || '') +'00';
+    dollars = dollars.split('').reverse().join('')
+        .replace(/(\d{3}(?!$))/g, '$1,')
+        .split('').reverse().join('');
+    return '$' + dollars + '.' + cents.slice(0, 2);
+	}
+
+	// var newCusineFrom = $('#cusine_form');
+	// newCusineFrom.submit(function(e){ 
+	// 	console.log(new FormData($(this)[0]));
+	// 	$.ajax({
+	// 		type:newCusineFrom.attr('method'),
+	// 		url:newCusineFrom.attr('action'),
+	// 		data:new FormData(this),
+	// 		processData: false,
+ //  			contentType: false,
+	// 		success:function(data){
+	// 			var type = JSON.parse(data);
+	// 			$('#insert-cuisine-step4-modal').modal('hide');
+	// 		},
+	// 		error: function(){
+	// 			alert("ERROR");
+	// 		}
+	// 	});
+	// 	e.preventDefault();
+	// });
+
+
+	
+	var cuisines_table = function(TypeId){
+		console.log(TypeId);
+		$.ajax({
+		type: 'get',
+		url:'/Types',
+		success: function(types) {
+			$.each(types, function(i, type){ 
+				if(type._id === TypeId){
+					$.each(type.cuisines, function(i, cuisine){
+						$("#cuisines_menu" ).append(
+				'<tr>'+
+                  '<td>'+
+                  '<div class="row">'+
+                    '<div class="image"><img src='+cuisine.image+'" height="100px"></div>'+
+                    '<div class="intro">'+
+                      '<div class="row">'+
+                        '<div class="col-sm-10 cuisineName" name="cuisineName">'+cuisine.Name+'</div>'+
+                        '<div class="col-sm-2">'+cuisine.price+'</div>'+
+                        '<!-- <div class="col-sm-2">$".$retailPrice."</div> -->'+
+                      '</div>'+
+                      '<div class="row"><div class="col-sm-12">'+cuisine.description+'</div></div>'+
+                    '</div>'+
+                  '</div>'+
+                  '</td>'+
+                  '<td class="hidden edit-actions">'+
+                  '<div class="row"><div class="col-md-6">'+
+                    '<button data-toggle="modal" data-target="#edit-cuisine-modal" type="button"'+
+                          'class="edit-cuisine btn btn-success btn-xs">'+
+                      '<span class="glyphicon glyphicon-pencil"></span>'+
+                      '<!-- <div class="hidden cuisineID">".$cuisineID."</div> -->'+
+                      '<div class="hidden cuisineName">'+cuisine.Name+'</div>'+
+                      '<div class="hidden retailPrice">'+cuisine.price+'</div>'+
+                      '<!-- <div class="hidden specialPrice">".$specialPrice."</div> -->'+
+                      '<!-- <div class="hidden description">".$description."</div> -->'+
+                      '<!-- <div class="hidden cuisineTypeID">".$cuisineTypeID."</div> -->'+
+                      '<!-- <div class="hidden dailyspecial">".$dailyspecialCheck."</div> -->'+
+                    '</button>'+
+                  '</div>'+
+                  '<div class="col-md-6">'+
+                    '<button data-toggle="modal" data-target="#delete-cuisine-modal" type="button"'+
+                        'class="delete-cuisine btn btn-danger btn-xs">'+
+                    '<span class="glyphicon glyphicon-trash"></span>'+
+                      '<!-- <div class="hidden cuisineID">".$cuisineID."</div> -->'+
+                    '</button>'+
+                  '</div>'+
+                '</div>'+
+              '</td>'+
+            '</tr>')})
+				}	
+			});
+			}	
+		});
+	};
+});
+
+
+ 
+
+
+

@@ -69,6 +69,12 @@ th {
   background-color: #428bca;
 }
 
+div #Type_list{
+   font-size: 18px;
+   text-indent: 12px;
+   line-height: 1.8;
+   font-family: Arial;
+}
 
 /*
  * Main content

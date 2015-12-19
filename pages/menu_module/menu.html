@@ -59,11 +59,10 @@
           <ul class="nav nav-sidebar">
             <li><h4>Cuisine Types</h4></li>
 
-            <li ng-repeat="type in types" ng-click="selCuisines(type)"><a href="#">{{type.Name}}</a></li>
+            <div id="Type_list"></div>
 
             <hr>
-            <li>
-            <a href="#">Cuisine Lists OverView<span class="sr-only">(current)</span></a></li>
+            <li><a href="#">Cuisine Lists OverView<span class="sr-only">(current)</span></a></li>
           </ul>
         </div>
 
@@ -73,21 +72,59 @@
               <thead>
                 <tr>
                   <th>Cuisines</th>
-                  <th></th>
-                  <th></th>
                   <th class="hidden edit-actions">Edit</th>
                 </tr>
               </thead>
-               <tbody>
+               <tbody id="cuisines_menu">
+
               <!-- cuisine view -->
-                <tr ng-repeat="cuisine in cuisines">
+                <!-- tr ng-repeat="cuisine in cuisines">
                   <td class = "cuisineName">{{cuisine.Name}}</td>
                   <td>{{cuisine.price|currency}}</td>
                   <td class = "image"><img ng-src="{{cuisine.image}}" style="width:150px;height:150px;"></td>
-                </tr>
-
+                </tr> -->
+                <tr ng-repeat="cuisine in cuisines">
+                  <td>
+                  <div class="row">
+                    <!-- <div class="image"><img ng-src="{{cuisine.image}}“ height="100px"></div>" -->
+                    <div class="image"><img ng-src="{{cuisine.image}}" height="100px"></div>
+                    <div class="intro">
+                      <div class="row">
+                        <div class="col-sm-10 cuisineName" name="cuisineName">{{cuisine.Name}}</div>
+                        <div class="col-sm-2">{{cuisine.price|currency}}</div>
+                        <!-- <div class="col-sm-2">$".$retailPrice."</div> -->
+                      </div>
+                      <div class="row"><div class="col-sm-12">{{cuisine.description}}</div></div>
+                    </div>
+                  </div>
+                  </td>
+                  <td class="hidden edit-actions">
+                  <div class="row"><div class="col-md-6">
+                    <button data-toggle="modal" data-target="#edit-cuisine-modal" type="button"
+                          class="edit-cuisine btn btn-success btn-xs">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                      <!-- <div class="hidden cuisineID">".$cuisineID."</div> -->
+                      <div class="hidden cuisineName">{{cuisine.Name}}</div>
+                      <div class="hidden retailPrice">{{cuisine.price|currency}}</div>
+                      <!-- <div class="hidden specialPrice">".$specialPrice."</div> -->
+                      <!-- <div class="hidden description">".$description."</div> -->
+                      <!-- <div class="hidden cuisineTypeID">".$cuisineTypeID."</div> -->
+                      <!-- <div class="hidden dailyspecial">".$dailyspecialCheck."</div> -->
+                    </button>
+                  </div>
+                  <div class="col-md-6">
+                    <button data-toggle="modal" data-target="#delete-cuisine-modal" type="button"
+                        class="delete-cuisine btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-trash"></span>
+                      <!-- <div class="hidden cuisineID">".$cuisineID."</div> -->
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
 
               <!-- cuisine view end -->
+             
               </tbody>
             </table>
           </div>
@@ -135,7 +172,7 @@
             </button>
             <h4 class="modal-title">Edit Cuisine</h4>
           </div>
-          <form action="#" method="POST" class="form-horizontal" role="form">
+          <form action="menu/cuisine_edit" id="cuisine_edit" method="POST" class="form-horizontal" role="form">
             <input type="text" name="cuisineID" class="hidden">
              <div class="modal-body">
               <div class="form-group">
@@ -159,9 +196,8 @@
                 Cuisine Type
                 </label>
                 <div class="col-sm-9">
-                  <select class="form-control" name="cuisine_type" id="cuisine-type-select">
-                    <option value="NULL"></option>
-
+                  <select class="form-control" name="cuisine_type" id="cuisine-type-select2">
+                    
                   <!-- add selection type -->
 
                   </select>
@@ -314,10 +350,7 @@
                 </label>
                 <div class="col-sm-8">
                   <select class="form-control" name="cuisine_type" id="cuisine-type-select">
-                    <option ng-repeat="type in types" value="{{type.Name}}">{{type.Name}}</option>
-
                   <!--  add type name  -->
-
                   </select>
                 </div>
               </div>
@@ -383,7 +416,8 @@
             </button>
             <h4 class="modal-title">Add New Cuisine - Step 4: Upload Image</h4>
           </div>
-          <form action="menu/add_cuisine" method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
+          <form action="menu/add_cuisine" id="cusine_form" method="POST" class="form-horizontal" role="form" 
+          enctype="multipart/form-data">
             <input type="text" name="cuisine_name_en" class="hidden">
             <input type="text" name="cuisine_typeID" class="hidden">
             <input type="text" name="cuisine_retailPrice" class="hidden">
@@ -423,7 +457,7 @@
             </button>
             <h4 class="modal-title">Add Cuisine Type</h4>
           </div>
-          <form action="menu/add_type" method="POST" class="form-horizontal" role="form">
+          <form action="menu/add_type" id="Typeform" method="POST" class="form-horizontal" role="form">
             <input type="text" name="lastSortOrder" class="hidden">
             <div class="modal-body">
               <div class="form-group">
@@ -464,21 +498,24 @@
                 <div class="col-sm-8">Cuisine Type Name</div>
               </div>
               <div class="row">
-                  <form action="menu/edit" method="POST" class="form-horizontal" role="form">
+                  <form action="#" method="POST" class="form-horizontal" role="form">
                   <input type="text" name="typeID" class="hidden" value=".$row['typeID']">
                   <div class="col-sm-2">
-                  <input type="text" name="sortOrder" class="form-control" id="sortOrder-input" placeholder="['sortOrder']." value="sortOrder">
+                  <!-- <input type="text" name="sortOrder" class="form-control" id="sortOrder-input" placeholder="['sortOrder']." value="sortOrder"> -->
                   </div>
                   <div class="col-sm-6">
-                  <input type="text" name="typeName" class="form-control" id="typeName-input" placeholder=".$typeName." value="typeName">
+                  <!-- <input type="text" name="typeName" class="form-control" id="typeName-input" placeholder=".$typeName." value="typeName"> -->
+                  <select class="form-control" name="typeName" id="typeName-input">
+                    <option ng-repeat="type in types" value="{{type.Name}}">{{type.Name}}</option>
+                  </select>
                   </div>
-                  <div class="col-sm-2">
+                  <!-- <div class="col-sm-2">
                   <button type="submit" class="btn btn-sm btn-warning\">Edit</button>
-                  </div>
+                  </div> -->
                   <div class="col-sm-2">
                   <button data-toggle="modal" data-target="#delete-cuisine-type-modal" type="button" 
                     class="btn btn-sm btn-danger delete-cuisine-type" data-dismiss="modal">Delete
-                  <div class="hidden typeID">['typeID']</div>
+                  <!-- <div class="hidden typeID">['typeID']</div> -->
                   </button>
                   </div>
                   </form>
@@ -504,7 +541,7 @@
             </button>
             <h4 class="modal-title">Delete Cuisine Type</h4>
           </div>
-          <form action="#" method="POST" class="form-horizontal" role="form">
+          <form action="/menu/dalete_type" method="POST" class="form-horizontal" role="form">
             <input type="text" name="typeID" class="hidden">
             <div class="modal-body">
               <div class="container">Are you sure you wish to delete this cuisine type?</div>
@@ -524,6 +561,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://jquerypriceformat.com/txt/jquery.price_format.2.0.js_.txt"></script>
     <script type="text/javascript">
       var editVar = "Edit";
       var doneVar = "Done";
